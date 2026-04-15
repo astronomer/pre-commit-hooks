@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 
-# Get the list of staged files
-staged_files=$(git diff --cached --name-only)
+bad_files=()
+while IFS= read -r -d '' file; do
+    if [[ "$file" =~ [[:space:]] ]]; then
+        bad_files+=("$file")
+    fi
+done < <(git -c core.quotePath=false diff --cached -z --name-only)
 
-# Check if any filename contains whitespace
-if echo "$staged_files" | grep -q '[[:space:]]'; then
+if [[ ${#bad_files[@]} -gt 0 ]]; then
     echo "Error: Filenames cannot contain whitespace characters (spaces, tabs, etc.):"
-    echo "$staged_files" | grep '[[:space:]]'
+    printf '%s\n' "${bad_files[@]}"
     exit 1
 fi
 
