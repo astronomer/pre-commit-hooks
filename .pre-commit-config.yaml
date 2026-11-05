@@ -5,11 +5,6 @@ repos:
     rev: v2.4.3
     hooks:
       - id: codespell
-  - repo: https://github.com/rbubley/mirrors-prettier
-    rev: "v3.9.10"
-    hooks:
-      - id: prettier
-        args: ["--print-width=135"]
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
@@ -43,9 +38,11 @@ repos:
     hooks:
       - id: yamllint
   - repo: https://gitlab.com/danielhoherd/pre-commit-hooks
-    rev: 976b58ba36fcd3313fed6d5a7abc228cec64f994
+    rev: 8fbc5a16f75cb8fb077a0ae94198669d3068c404
     hooks:
       - id: CVE-2017-18342
+      - id: prettier
+        args: ["--print-width=135"]
       - id: remove-unicode-zero-width-non-breaking-spaces
       - id: remove-unicode-zero-width-space
       - id: replace-en-dashes
