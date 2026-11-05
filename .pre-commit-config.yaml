@@ -38,7 +38,7 @@ repos:
     hooks:
       - id: yamllint
   - repo: https://github.com/astronomer/pre-commit-hooks
-    rev: 8fbc5a16f75cb8fb077a0ae94198669d3068c404
+    rev: 2026.11.5
     hooks:
       - id: prettier
         args: ["--print-width=135"]
