@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
+# Fail if any filename passed as an argument contains whitespace.
+# pre-commit passes the files to check (never deleted ones), so this works for
+# commits, --all-files, and --from-ref/--to-ref runs alike.
 
 bad_files=()
-while IFS= read -r -d '' file; do
+for file in "$@"; do
     if [[ "$file" =~ [[:space:]] ]]; then
         bad_files+=("$file")
     fi
-done < <(git -c core.quotePath=false diff --cached -z --name-only)
+done
 
 if [[ ${#bad_files[@]} -gt 0 ]]; then
     echo "Error: Filenames cannot contain whitespace characters (spaces, tabs, etc.):"
