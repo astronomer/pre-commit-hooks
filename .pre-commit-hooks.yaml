@@ -76,3 +76,14 @@
   always_run: True
   pass_filenames: False
   entry: "scripts/sort-gitignore.sh"
+
+- id: prettier
+  name: prettier
+  description: ""
+  entry: prettier --write --ignore-unknown
+  language: node
+  "types": [text]
+  args: []
+  require_serial: false
+  additional_dependencies: ["prettier@3.9.10"]
+  minimum_pre_commit_version: "0"

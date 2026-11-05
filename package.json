@@ -1,0 +1,5 @@
+{
+  "name": "placeholder_package",
+  "description": "Placeholder so node-language hooks (prettier) can be installed; prek runs npm pack on the hook repo root, which requires a package.json",
+  "version": "0.0.0"
+}
