@@ -11,7 +11,6 @@ This is a collection of hooks that I use quite broadly.
      - repo: https://gitlab.com/astronomer/pre-commit-hooks
        rev: master # pin to a commit hash or tag for reproducible runs
        hooks:
-         - id: CVE-2017-18342
          - id: forbid-whitespace-in-filenames
          - id: prettier
          - id: remove-unicode-left-to-right-mark
@@ -31,7 +30,6 @@ Every hook below is defined in [.pre-commit-hooks.yaml](.pre-commit-hooks.yaml).
 
 | Hook id                                         | What it does                                                                                                                                                                                                                               |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `CVE-2017-18342`                                | Fails on `yaml.load` / `pyyaml.load` in `.py` files, which is unsafe ([details](https://msg.pyyaml.org/load)).                                                                                                                             |
 | `forbid-whitespace-in-filenames`                | Fails if any filename contains whitespace (spaces, tabs, etc.).                                                                                                                                                                            |
 | `prettier`                                      | Runs [prettier](https://prettier.io) (`--write --ignore-unknown`) on text files. Pass options with `args`, e.g. `["--print-width=135"]`. Requires Node 26.12.1 or newer (set with `language_version`), regardless of the Node on the host. |
 | `remove-unicode-left-to-right-mark`             | Removes U+200E (left-to-right mark).                                                                                                                                                                                                       |
@@ -44,10 +42,11 @@ Every hook below is defined in [.pre-commit-hooks.yaml](.pre-commit-hooks.yaml).
 
 ## Deprecated hooks
 
-These always fail with a message pointing at the replacement. Do not use them in new configs.
+These fail with a message pointing at the replacement (`CVE-2017-18342` only where the repo has Python files). Do not use them in new configs.
 
 | Hook id                              | Use instead                                                                                                             |
 | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `CVE-2017-18342`                     | ruff rule `S506` (`unsafe-yaml-load`); PyYAML 6.0+ already requires an explicit `Loader`, which fixed the original bug  |
 | `remove-en-dashes`                   | `replace-en-dashes`                                                                                                     |
 | `remove-unicode-non-breaking-spaces` | `replace-unicode-non-breaking-spaces`                                                                                   |
 | `sort-gitignore`                     | `file-contents-sorter` from [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks) with `files: .gitignore` |

@@ -1,0 +1,47 @@
+---
+# Tags each hook change on master with a semver-compatible calver tag:
+# YYYY.M.D for the first release of a UTC day, YYYY.M.D+N for later ones that day.
+# Tools such as `prek autoupdate` and `pre-commit autoupdate` follow tags, so this is what lets consumers update.
+name: Tag release
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - .pre-commit-hooks.yaml
+      - scripts/**
+      - package.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Serialize runs so two merges close together cannot compute the same tag.
+concurrency:
+  group: tag-release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+      - name: Self-test the tag logic
+        run: .github/scripts/test-next-calver-tag.sh
+      - name: Tag this commit
+        run: |
+          git fetch --tags --force
+          # Re-running on a commit that already has a release tag must not create another one.
+          if git tag --points-at HEAD | grep -Eq '^[0-9]{4}\.[0-9]+\.[0-9]+(\+[0-9]+)?$'; then
+            echo "HEAD is already tagged: $(git tag --points-at HEAD | tr '\n' ' ')"
+            exit 0
+          fi
+          tag="$(.github/scripts/next-calver-tag.sh)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Annotated, so the tag date is when it was created, not the (possibly older) commit date that autoupdate would otherwise use to order tags.
+          git tag -a "$tag" -m "Release $tag"
+          git push origin "refs/tags/$tag"
+          echo "Tagged $tag" >> "$GITHUB_STEP_SUMMARY"
