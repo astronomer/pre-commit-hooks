@@ -80,6 +80,9 @@
   description: ""
   entry: prettier --write --ignore-unknown
   language: node
+  # Minimum Node: 26.12.1 is the first 26.x release with the Brotli decoder fix (CVE-2026-111497) and without the compromised eMudhra roots in its CA store.
+  # Keep this a simple ">=X" range: compound ranges such as ">=26.12.1,<27" break pre-commit (nodeenv cannot parse them).
+  language_version: ">=26.12.1"
   "types": [text]
   args: []
   require_serial: false
