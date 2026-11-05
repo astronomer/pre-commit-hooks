@@ -40,7 +40,6 @@ repos:
   - repo: https://github.com/astronomer/pre-commit-hooks
     rev: 8fbc5a16f75cb8fb077a0ae94198669d3068c404
     hooks:
-      - id: CVE-2017-18342
       - id: prettier
         args: ["--print-width=135"]
       - id: remove-unicode-zero-width-non-breaking-spaces

@@ -1,10 +1,4 @@
 ---
-- id: CVE-2017-18342 # https://msg.pyyaml.org/load
-  name: Disallow pyyaml.load
-  entry: '\b(py)?yaml.load\b'
-  language: pygrep
-  files: '\.py$'
-
 - id: remove-unicode-zero-width-space
   name: Remove the unicode character U+200B (zero width space)
   language: system
@@ -74,6 +68,14 @@
   always_run: True
   pass_filenames: False
   entry: "scripts/sort-gitignore.sh"
+
+- id: CVE-2017-18342
+  name: Disallow pyyaml.load (deprecated, use ruff S506)
+  language: script
+  # Only fails where there is Python to check, unlike the other deprecated hooks.
+  files: '\.py$'
+  pass_filenames: false
+  entry: "scripts/cve-2017-18342.sh"
 
 - id: prettier
   name: prettier
